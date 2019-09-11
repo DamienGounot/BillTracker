@@ -8,26 +8,26 @@
       <v-spacer></v-spacer>
       <v-btn
         text
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        href="https://github.com/DamienGounot/BillTracker"
         target="_blank"
       >
-        <span class="mr-2">Latest Release</span>
+        <span class="mr-2">Github Repository</span>
       </v-btn>
     </v-app-bar>
 
     <v-content>
-      <HelloWorld/>
+      <Login/>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+import Login from './components/Login';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
+    Login,
   },
   data: () => ({
     //
