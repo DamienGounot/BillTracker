@@ -22,15 +22,14 @@
 </template>
 
 <script>
-import Login from './components/Login';
-
+import Login from './components/Login'
 export default {
   name: 'App',
   components: {
-    Login,
+    Login
   },
   data: () => ({
     //
-  }),
-};
+  })
+}
 </script>
