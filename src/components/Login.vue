@@ -48,6 +48,8 @@ export default {
     show: false,
     msgType: '',
     statusMsg: '',
+    registerError: false,
+    loginGranted: false,
     Users: [{ Username: 'root', Password: 'root' }]
   }),
 
@@ -61,18 +63,21 @@ export default {
       } else {
         console.log('parcours des users')
         this.Users.forEach(element => {
-          if (this.Username !== element.Username || this.Password !== element.Password) {
-            console.log('erreur combinaison')
-            this.msgType = 'error'
-            this.statusMsg = 'Incorrect Username or Password !'
-            this.show = true
-          } else {
-            console.log('combinaison valide')
-            this.msgType = 'success'
-            this.statusMsg = 'Logged in as ' + element.Username
-            this.show = true
+          if (this.Username === element.Username && this.Password === element.Password) {
+            this.loginGranted = true
           }
         })
+        if (!this.loginGranted) {
+          console.log('combinaison non valide')
+          this.msgType = 'error'
+          this.statusMsg = 'Incorrect Username or Password !'
+          this.show = true
+        } else {
+          console.log('combinaison valide')
+          this.msgType = 'success'
+          this.statusMsg = 'Logged in as ' + this.Username
+          this.show = true
+        }
       }
       console.log(JSON.stringify(this.Users))
     },
@@ -85,24 +90,29 @@ export default {
       } else {
         this.Users.forEach(element => {
           console.log('parcours des users')
+          console.log(element.Username)
           if (this.Username === element.Username) {
-            console.log('user existant')
-            this.msgType = 'warning'
-            this.statusMsg = 'The User ' + element.Username + ' already exist !'
-            this.show = true
-          } else {
-            console.log('user créer')
-            this.Users.push({
-              Username: this.Username,
-              Password: this.Password })
-            this.msgType = 'success'
-            this.statusMsg = 'The User ' + this.Username + ' has been successfully created !'
-            this.show = true
-            this.Username = ''
-            this.Password = ''
-            console.log(JSON.stringify(this.Users))
+            this.registerError = true
           }
         })
+        if (this.registerError) {
+          console.log('user existant')
+          this.msgType = 'warning'
+          this.statusMsg = 'The User ' + this.Username + ' already exist !'
+          this.show = true
+          this.registerError = false
+        } else {
+          console.log('user créer')
+          this.Users.push({
+            Username: this.Username,
+            Password: this.Password })
+          this.msgType = 'success'
+          this.statusMsg = 'The User ' + this.Username + ' has been successfully created !'
+          this.show = true
+          this.Username = ''
+          this.Password = ''
+          console.log(JSON.stringify(this.Users))
+        }
       }
     }
   }
