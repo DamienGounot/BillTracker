@@ -77,6 +77,7 @@ export default {
           this.msgType = 'success'
           this.statusMsg = 'Logged in as ' + this.Username
           this.show = true
+          this.$router.push('/Home')
         }
       }
       console.log(JSON.stringify(this.Users))
