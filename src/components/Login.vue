@@ -23,7 +23,7 @@
     ></v-text-field>
     <v-btn
       color=success
-      @click="Login"
+      @click="Login()"
       block
       rounded
     >
@@ -46,28 +46,27 @@ export default {
     Username: '',
     Password: '',
     show: false,
-    msgType: '',
+    msgType: 'error',
     statusMsg: '',
-    registerError: false,
-    loginGranted: false,
-    Users: [{ Username: 'root', Password: 'root' }]
+    loginGranted: false
   }),
 
   methods: {
-    Login () {
+    async Login () {
       if (this.Password === '' || this.Username === '') {
         console.log('empty')
         this.msgType = 'warning'
         this.statusMsg = 'Username & Password are required !'
         this.show = true
       } else {
-        console.log('parcours des users')
-        this.Users.forEach(element => {
-          if (this.Username === element.Username && this.Password === element.Password) {
-            this.loginGranted = true
-          }
+        console.log('login request')
+        const login = await this.axios.post('http://localhost:4000/api/login', {
+          username: this.Username,
+          password: this.Password
+
         })
-        if (!this.loginGranted) {
+        console.log(login.data.status)
+        if (!login.data.status) {
           console.log('combinaison non valide')
           this.msgType = 'error'
           this.statusMsg = 'Incorrect Username or Password !'
@@ -80,42 +79,51 @@ export default {
           this.$router.push('/Home')
         }
       }
-      console.log(JSON.stringify(this.Users))
     },
-    createNewUser () {
+    async createNewUser () {
       if (this.Password === '' || this.Username === '') {
         console.log('empty')
         this.msgType = 'warning'
         this.statusMsg = 'Username & Password are required !'
         this.show = true
       } else {
-        this.Users.forEach(element => {
-          console.log('parcours des users')
-          console.log(element.Username)
-          if (this.Username === element.Username) {
-            this.registerError = true
-          }
+        // server request to know if a user already exist
+        const jsondata = await this.axios.post('http://localhost:4000/api/register', {
+          username: this.Username
         })
-        if (this.registerError) {
+        if (!jsondata.data.status) {
           console.log('user existant')
           this.msgType = 'warning'
           this.statusMsg = 'The User ' + this.Username + ' already exist !'
           this.show = true
-          this.registerError = false
         } else {
-          console.log('user créer')
-          this.Users.push({
-            Username: this.Username,
-            Password: this.Password })
+          // add new user
+          this.axios.post('http://localhost:4000/api/createuser', {
+            username: this.Username,
+            password: this.Password
+          })
+
           this.msgType = 'success'
           this.statusMsg = 'The User ' + this.Username + ' has been successfully created !'
           this.show = true
           this.Username = ''
           this.Password = ''
-          console.log(JSON.stringify(this.Users))
         }
       }
     }
   }
 }
+
+/* rmElement (index) {
+      console.log('index', index)
+      this.todos.splice(index, 1)
+},
+    addElement () {
+      this.todos.push({
+        id: this.todos.length,
+        name: this.name,
+        description: this.description
+      })
+      console.log('ajouté !')
+    } */
 </script>
