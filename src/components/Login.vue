@@ -73,9 +73,6 @@ export default {
           this.show = true
         } else {
           console.log('combinaison valide')
-          this.msgType = 'success'
-          this.statusMsg = 'Logged in as ' + this.Username
-          this.show = true
           this.$router.push('/Home')
         }
       }

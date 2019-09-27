@@ -30,12 +30,13 @@
         <v-list-item-group
           v-model="group"
         >
+
           <v-list-item>
-            <v-list-item-title @click="goToAccount()">Accounts</v-list-item-title>
+            <v-list-item-title>History</v-list-item-title>
           </v-list-item>
 
           <v-list-item>
-            <v-list-item-title @click="goToOperation()">Add Bank Operation</v-list-item-title>
+            <v-list-item-title>Add Bank Operation</v-list-item-title>
           </v-list-item>
 
           <v-list-item>
@@ -52,7 +53,7 @@ export default {
   data: () => ({
     drawer: false,
     group: null,
-    pageTitle: 'History'
+    pageTitle: 'Accounts'
   }),
 
   watch: {
@@ -67,12 +68,6 @@ export default {
       this.axios.post('http://localhost:4000/api/logout')
       console.log('logout')
       this.$router.push('/')
-    },
-
-    goToAccount (username) {
-      console.log('Username: ' + username)
-      this.axios.post('http://localhost:4000/api/accountList')
-      this.$router.push('/Account')
     }
   }
 }
