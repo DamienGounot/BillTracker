@@ -32,7 +32,7 @@
         >
 
           <v-list-item>
-            <v-list-item-title>History</v-list-item-title>
+            <v-list-item-title @click="goToHome">History</v-list-item-title>
           </v-list-item>
 
           <v-list-item>
@@ -45,15 +45,28 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
+      <v-data-table
+    :headers="headers"
+    :items="accounts"
+    :items-per-page="5"
+    class="elevation-1"
+  ></v-data-table>
   </v-card>
 </template>
 
 <script>
 export default {
   data: () => ({
+    User: sessionStorage.getItem('session_username'),
     drawer: false,
     group: null,
-    pageTitle: 'Accounts'
+    pageTitle: 'Accounts',
+    headers: [
+      { text: 'Account Name', value: 'accountName' },
+      { text: 'Account ID', value: 'accountID' },
+      { text: 'Total Amount ($)', value: 'total' }
+    ],
+    accounts: JSON.parse(sessionStorage.getItem('session_accounts'))
   }),
 
   watch: {
@@ -64,10 +77,20 @@ export default {
 
   methods: {
     logout () {
-      // eslint-disable-next-line no-unused-vars
       this.axios.post('http://localhost:4000/api/logout')
       console.log('logout')
+      sessionStorage.clear()
       this.$router.push('/')
+    },
+    goToBankOperation () {
+      console.log('Operation Management of: ' + this.User)
+      this.axios.post('http://localhost:4000/api/addOperation', {
+        user: this.User
+      })
+      this.$router.push('/Operation')
+    },
+    goToHome () {
+      this.$router.push('/Home')
     }
   }
 }

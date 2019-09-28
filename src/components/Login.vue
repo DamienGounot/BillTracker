@@ -73,6 +73,7 @@ export default {
           this.show = true
         } else {
           console.log('combinaison valide')
+          sessionStorage.setItem('session_username', this.Username)
           this.$router.push('/Home')
         }
       }

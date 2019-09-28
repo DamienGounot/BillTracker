@@ -9,6 +9,12 @@ const morgan = require('morgan')
 const cors = require('cors')
 const session = require('express-session')
 const app = express()
+
+app.use(cors({
+  credentials: true,
+  origin: 'http://localhost:8080'
+}))
+
 app.use(session({
   secret: 'blablablabla', // changez cette valeur
   resave: false,
@@ -17,7 +23,7 @@ app.use(session({
 }))
 app.use(morgan('dev'))
 app.use(bodyParser.json())
-app.use(cors())
+
 const path = require('path')
 app.use(express.static(path.join(__dirname, 'dist/')))
 const port = process.env.PORT || 4000
@@ -30,12 +36,26 @@ const users = [{
   password: 'root'
 }]
 
-const accounts = [{
-  userID: 'root',
-  accountName: 'Livret A',
-  accountID: '15646564',
-  total: '100'
-}]
+const accounts = [
+  {
+    userID: 'root',
+    accountName: 'Livret A',
+    accountID: '15646564',
+    total: '14576'
+  },
+  {
+    userID: 'toto',
+    accountName: 'PEL',
+    accountID: '5615615',
+    total: '54879'
+  },
+  {
+    userID: 'root',
+    accountName: 'Livret Jeune',
+    accountID: '1991561',
+    total: '200'
+  }
+]
 
 const operations = [{
   accountID: '15646564',
@@ -44,7 +64,6 @@ const operations = [{
   type: 'debit',
   amount: '60'
 }]
-
 app.get('/api/test', (req, res) => {
   console.log('ce console.log est appelé au bon moment')
   res.json([
@@ -113,4 +132,22 @@ app.post('/api/login', (req, res) => {
 })
 
 app.post('/api/accountList', (req, res) => {
+  console.log('Accounts of : ' + req.body.user)
+  var jsonAccounts = []
+
+  accounts.forEach(element => {
+    if (element.userID === req.body.user) {
+      jsonAccounts.push({
+        userID: element.userID,
+        accountName: element.accountName,
+        accountID: element.accountID,
+        total: element.total
+      })
+    }
+  })
+  console.log(jsonAccounts)
+  res.json(jsonAccounts)
+})
+
+app.post('/api/addOperation', (req, res) => {
 })
