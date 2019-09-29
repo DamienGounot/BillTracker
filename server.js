@@ -149,5 +149,19 @@ app.post('/api/accountList', (req, res) => {
   res.json(jsonAccounts)
 })
 
+app.post('/api/deleteAccount', (req, res) => {
+  console.log('Delete account with ID: ' + req.body.idToRemove)
+  for (var i = accounts.length - 1; i >= 0; i--) {
+    if (accounts[i].accountID === req.body.idToRemove) {
+      console.log('We found an account with id: ' + req.body.idToRemove + ' at index: ' + i)
+      accounts.splice(i, 1)
+    }
+  }
+  console.log(accounts)
+})
+
+app.post('/api/createAccount', (req, res) => {
+})
+
 app.post('/api/addOperation', (req, res) => {
 })

@@ -1,4 +1,5 @@
 <template>
+<div>
   <v-card
     class="mx-auto overflow-hidden"
     height="400"
@@ -52,6 +53,58 @@
     class="elevation-1"
   ></v-data-table>
   </v-card>
+    <v-row align="center">
+    <v-row justify="space-around">
+      <div>
+        <v-form
+      ref="form"
+    >
+      <v-text-field
+        v-model="NameNewAccount"
+        :rules="[v => !!v || 'Account is required']"
+        label="Account Name"
+        required
+      ></v-text-field>
+      <v-btn
+        :disabled='!isCompleteNewAccount'
+        color="success"
+        class="mr-4"
+        :block="true"
+
+      >
+        Create Account
+      </v-btn>
+      <v-select
+        v-model="idDelAccount"
+        :items="accounts"
+        item-text="accountID"
+        :rules="[v => !!v || 'Account is required']"
+        label="Account ID"
+        required
+      ></v-select>
+
+      <v-btn
+        color="error"
+        class="mr-4"
+        :disabled='!isCompleteDeleteAccount'
+        :block="true"
+        @click="deleteAccount()"
+      >
+        Delete Account
+      </v-btn>
+    </v-form>
+               <v-btn
+        class="mr-4"
+        :block="true"
+        :disabled='!isCompleteDeleteAccount && !isCompleteNewAccount'
+        @click="clear"
+      >
+        Clear
+      </v-btn>
+      </div>
+    </v-row>
+  </v-row>
+  </div>
 </template>
 
 <script>
@@ -66,12 +119,24 @@ export default {
       { text: 'Account ID', value: 'accountID' },
       { text: 'Total Amount ($)', value: 'total' }
     ],
-    accounts: JSON.parse(sessionStorage.getItem('session_accounts'))
+    accounts: JSON.parse(sessionStorage.getItem('session_accounts')),
+
+    NameNewAccount: '',
+    idDelAccount: ''
   }),
 
   watch: {
     group () {
       this.drawer = false
+    },
+    accounts: JSON.parse(sessionStorage.getItem('session_accounts'))
+  },
+  computed: {
+    isCompleteNewAccount () {
+      return this.NameNewAccount
+    },
+    isCompleteDeleteAccount () {
+      return this.idDelAccount
     }
   },
 
@@ -91,6 +156,24 @@ export default {
     },
     goToHome () {
       this.$router.push('/Home')
+    },
+    clear () {
+      this.NameNewAccount = ''
+      this.idDelAccount = null
+    },
+    deleteAccount () {
+      console.log('Delete account with id: ' + this.idDelAccount)
+      this.axios.post('http://localhost:4000/api/deleteAccount', {
+        idToRemove: this.idDelAccount
+      })
+      this.updateAccounts()
+    },
+    async updateAccounts () {
+      console.log('Accounts of: ' + this.User)
+      const accountList = await this.axios.post('http://localhost:4000/api/accountList', {
+        user: this.User
+      })
+      sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
     }
   }
 }
