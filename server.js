@@ -157,10 +157,23 @@ app.post('/api/deleteAccount', (req, res) => {
       accounts.splice(i, 1)
     }
   }
-  console.log(accounts)
 })
 
 app.post('/api/createAccount', (req, res) => {
+  console.log('Create account with Name: ' + req.body.Name)
+  const errorName = accounts.find(u => u.accountName === req.body.Name)
+
+  if (!errorName) {
+    do {
+      var generatedID = Math.round(Math.random() * 1000000000)
+    } while (accounts.find(u => u.accountID === generatedID))
+    accounts.push({
+      userID: req.body.User,
+      accountName: req.body.Name,
+      accountID: generatedID,
+      total: '0'
+    })
+  }
 })
 
 app.post('/api/addOperation', (req, res) => {

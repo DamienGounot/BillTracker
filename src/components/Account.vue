@@ -70,7 +70,7 @@
         color="success"
         class="mr-4"
         :block="true"
-
+        @click="createAccount()"
       >
         Create Account
       </v-btn>
@@ -174,6 +174,16 @@ export default {
         user: this.User
       })
       sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
+      this.accounts = JSON.parse(sessionStorage.getItem('session_accounts'))
+      console.log('Account List Updated !')
+    },
+    createAccount () {
+      console.log('Create account with Name: ' + this.NameNewAccount)
+      this.axios.post('http://localhost:4000/api/createAccount', {
+        Name: this.NameNewAccount,
+        User: this.User
+      })
+      this.updateAccounts()
     }
   }
 }
