@@ -36,7 +36,7 @@
           </v-list-item>
 
           <v-list-item>
-            <v-list-item-title>Add Bank Operation</v-list-item-title>
+            <v-list-item-title @click="goToBankOperation">Add Bank Operation</v-list-item-title>
           </v-list-item>
 
           <v-list-item>
