@@ -5,6 +5,8 @@ import vuetify from './plugins/vuetify'
 import Vuerouter from 'vue-router'
 import Home from './components/Home'
 import Login from './components/Login'
+import Account from './components/Account'
+import Operation from './components/Operation'
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -14,9 +16,11 @@ Vue.use(VueAxios, axios)
 Vue.use(Vuerouter)
 
 const routes = [
-  { path: '/Home', component: Home },
-  { path: '/', component: Login },
-  { path: '/Login', component: Login }]
+  { path: '/Operation', component: Operation, meta: { requiresAuth: true } },
+  { path: '/Account', component: Account, meta: { requiresAuth: true } },
+  { path: '/Home', component: Home, meta: { requiresAuth: true } },
+  { path: '/', component: Login, meta: { requiresAuth: false } },
+  { path: '/Login', component: Login, meta: { requiresAuth: false }, name: 'login' }]
 
 const router = new Vuerouter({
   routes,

@@ -8,8 +8,12 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
 const session = require('express-session')
-
 const app = express()
+
+app.use(cors({
+  credentials: true,
+  origin: 'http://localhost:8080'
+}))
 
 app.use(session({
   secret: 'blablablabla', // changez cette valeur
@@ -19,15 +23,53 @@ app.use(session({
 }))
 app.use(morgan('dev'))
 app.use(bodyParser.json())
-app.use(cors())
+
 const path = require('path')
 app.use(express.static(path.join(__dirname, 'dist/')))
+const port = process.env.PORT || 4000
+app.listen(port, () => {
+  console.log(`listening on ${port}`)
+})
 
-const users = [{
-  username: 'root',
-  password: 'root'
+const users = [
+  {
+    username: 'root',
+    password: 'root'
+  },
+  {
+    username: 'toto',
+    password: 'toto'
+  }
+]
+
+const accounts = [
+  {
+    userID: 'root',
+    accountName: 'Livret A',
+    accountID: '15646564',
+    total: '14576'
+  },
+  {
+    userID: 'toto',
+    accountName: 'PEL',
+    accountID: '5615615',
+    total: '54879'
+  },
+  {
+    userID: 'root',
+    accountName: 'Livret Jeune',
+    accountID: '1991561',
+    total: '200'
+  }
+]
+
+const operations = [{
+  accountID: '15646564',
+  operationID: '5461',
+  operationName: 'essence',
+  type: 'debit',
+  amount: '60'
 }]
-
 app.get('/api/test', (req, res) => {
   console.log('ce console.log est appelé au bon moment')
   res.json([
@@ -41,39 +83,14 @@ app.get('/api/test', (req, res) => {
   ])
 })
 
-const port = process.env.PORT || 4000
-app.listen(port, () => {
-  console.log(`listening on ${port}`)
-})
-
-app.get('/api/logout', (req, res) => {
-  if (!req.session.userId) {
-    res.status(401)
-    res.json({
-      message: 'you are already disconnected'
-    })
-  } else {
-    req.session.userId = 0
-    res.json({
-      message: 'you are now disconnected'
-    })
+app.post('/api/logout', (req, res) => {
+  req.session.destroy()
+  if (!req.session) {
+    console.log('You are deconnected')
   }
-})
-
-app.get('/api/admin', (req, res) => {
-  if (!req.session.userId || req.session.isAdmin === false) {
-    res.status(401)
-    res.json({ message: 'Unauthorized' })
-    return
-  }
-
-  res.json({
-    message: 'congrats, you are connected'
-  })
 })
 
 app.post('/api/register', (req, res) => {
-  console.log('req.body', req.body)
   const test = users.find(u => u.username === req.body.username)
   if (!test) {
     res.json({
@@ -97,7 +114,6 @@ app.post('/api/createuser', (req, res) => {
 
 app.post('/api/login', (req, res) => {
   console.log('req.body', req.body)
-  console.log('req.query', req.query)
   if (!req.session.userId) {
     const isLoginCorrect = users.find(u => u.username === req.body.username && u.password === req.body.password)
     if (!isLoginCorrect) {
@@ -106,7 +122,8 @@ app.post('/api/login', (req, res) => {
         message: 'username or password error'
       })
     } else {
-      req.session.userId = 1000
+      req.session.userId = 1
+      console.log('UserID: ' + req.session.userId)
       res.json({
         status: true,
         message: 'connected'
@@ -118,4 +135,53 @@ app.post('/api/login', (req, res) => {
       message: 'you are already connected'
     })
   }
+})
+
+app.post('/api/accountList', (req, res) => {
+  console.log('Accounts of : ' + req.body.user)
+  var jsonAccounts = []
+
+  accounts.forEach(element => {
+    if (element.userID === req.body.user) {
+      jsonAccounts.push({
+        userID: element.userID,
+        accountName: element.accountName,
+        accountID: element.accountID,
+        total: element.total
+      })
+    }
+  })
+  console.log(jsonAccounts)
+  res.json(jsonAccounts)
+})
+
+app.post('/api/deleteAccount', (req, res) => {
+  console.log('Delete account with ID: ' + req.body.idToRemove)
+  for (var i = accounts.length - 1; i >= 0; i--) {
+    if (accounts[i].accountID === req.body.idToRemove) {
+      console.log('We found an account with id: ' + req.body.idToRemove + ' at index: ' + i)
+      accounts.splice(i, 1)
+      console.log('account ' + req.body.idToRemove + ' deleted !')
+    }
+  }
+})
+
+app.post('/api/createAccount', (req, res) => {
+  console.log('Create account with Name: ' + req.body.Name)
+  const errorName = accounts.find(u => u.accountName === req.body.Name)
+
+  if (!errorName) {
+    do {
+      var generatedID = Math.round(Math.random() * 1000000000)
+    } while (accounts.find(u => u.accountID === generatedID))
+    accounts.push({
+      userID: req.body.User,
+      accountName: req.body.Name,
+      accountID: generatedID,
+      total: '0'
+    })
+  }
+})
+
+app.post('/api/addOperation', (req, res) => {
 })
