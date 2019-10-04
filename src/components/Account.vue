@@ -2,7 +2,6 @@
 <div>
   <v-card
     class="mx-auto overflow-hidden"
-    height="400"
   >
 
     <v-app-bar
@@ -46,19 +45,26 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-      <v-data-table
+  <div>
+        <v-data-table
     :headers="headers"
     :items="accounts"
-    :items-per-page="5"
+    :items-per-page="All"
     class="elevation-1"
   ></v-data-table>
-  </v-card>
     <v-row align="center">
     <v-row justify="space-around">
       <div>
         <v-form
       ref="form"
     >
+               <v-alert
+      v-model="show"
+      :dismissible=false
+      :type="msgType"
+    >
+      {{statusMsg}}
+    </v-alert>
       <v-text-field
         v-model="NameNewAccount"
         :rules="[v => !!v || 'Account is required']"
@@ -105,6 +111,9 @@
     </v-row>
   </v-row>
   </div>
+  </v-card>
+
+  </div>
 </template>
 
 <script>
@@ -122,7 +131,11 @@ export default {
     accounts: JSON.parse(sessionStorage.getItem('session_accounts')),
 
     NameNewAccount: '',
-    idDelAccount: ''
+    idDelAccount: '',
+
+    show: false,
+    msgType: 'error',
+    statusMsg: ''
   }),
 
   watch: {
@@ -160,12 +173,16 @@ export default {
     clear () {
       this.NameNewAccount = ''
       this.idDelAccount = null
+      this.show = false
     },
     deleteAccount () {
       console.log('Delete account with id: ' + this.idDelAccount)
       this.axios.post('http://localhost:4000/api/deleteAccount', {
         idToRemove: this.idDelAccount
       })
+      this.show = true
+      this.msgType = 'success'
+      this.statusMsg = 'You have deleted the account with Id : ' + this.idDelAccount
       this.updateAccounts()
     },
     async updateAccounts () {
@@ -183,6 +200,10 @@ export default {
         Name: this.NameNewAccount,
         User: this.User
       })
+      this.show = true
+      this.msgType = 'success'
+      this.statusMsg = 'You have created the account : ' + this.NameNewAccount
+      this.NameNewAccount = ''
       this.updateAccounts()
     }
   }

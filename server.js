@@ -31,10 +31,16 @@ app.listen(port, () => {
   console.log(`listening on ${port}`)
 })
 
-const users = [{
-  username: 'root',
-  password: 'root'
-}]
+const users = [
+  {
+    username: 'root',
+    password: 'root'
+  },
+  {
+    username: 'toto',
+    password: 'toto'
+  }
+]
 
 const accounts = [
   {
@@ -155,6 +161,7 @@ app.post('/api/deleteAccount', (req, res) => {
     if (accounts[i].accountID === req.body.idToRemove) {
       console.log('We found an account with id: ' + req.body.idToRemove + ' at index: ' + i)
       accounts.splice(i, 1)
+      console.log('account ' + req.body.idToRemove + ' deleted !')
     }
   }
 })
