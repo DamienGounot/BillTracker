@@ -108,7 +108,7 @@
         :disabled='!isCompleteOperationAccountID || !isCompleteOperationName || !isCompleteOperationAmount || !isCompleteOperationType'
         :block="true"
         color= 'warning'
-        @click="AddOperation()"
+        @click="addOperation()"
       >
         Add Operation
       </v-btn>
@@ -139,6 +139,7 @@ export default {
       { text: 'Deposit', value: 'deposit' }
     ],
     accounts: JSON.parse(sessionStorage.getItem('session_accounts')),
+    operations: JSON.parse(sessionStorage.getItem('session_operations')),
     User: sessionStorage.getItem('session_username'),
     OperationName: '',
     OperationAccountID: '',
@@ -151,7 +152,9 @@ export default {
   watch: {
     group () {
       this.drawer = false
-    }
+    },
+    accounts: JSON.parse(sessionStorage.getItem('session_accounts')),
+    operations: JSON.parse(sessionStorage.getItem('session_operations'))
   },
 
   computed: {
@@ -192,6 +195,36 @@ export default {
       this.OperationAccountID = null
       this.OperationAmount = ''
       this.OperationType = null
+    },
+    addOperation () {
+      console.log('Add operation')
+      this.axios.post('http://localhost:4000/api/addOperation', {
+        accountID: this.OperationAccountID,
+        operationName: this.OperationName,
+        type: this.OperationType,
+        amount: this.OperationAmount,
+        userID: this.User
+      })
+      this.updateOperation()
+      this.updateAccounts()
+    },
+    async updateAccounts () {
+      console.log('Accounts of: ' + this.User)
+      const accountList = await this.axios.post('http://localhost:4000/api/accountList', {
+        user: this.User
+      })
+      sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
+      this.accounts = JSON.parse(sessionStorage.getItem('session_accounts'))
+      console.log('Account List Updated !')
+    },
+    async updateOperation () {
+      console.log('Operations of User: ' + this.User)
+      const operationList = await this.axios.post('http://localhost:4000/api/operationList', {
+        userID: this.User
+      })
+      sessionStorage.setItem('session_operations', JSON.stringify(operationList.data))
+      this.operations = JSON.parse(sessionStorage.getItem('session_operations'))
+      console.log('Operation List Updated !')
     }
   }
 }

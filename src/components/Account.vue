@@ -160,11 +160,12 @@ export default {
       sessionStorage.clear()
       this.$router.push('/')
     },
-    goToBankOperation () {
+    async goToBankOperation () {
       console.log('Operation Management of: ' + this.User)
-      this.axios.post('http://localhost:4000/api/addOperation', {
-        user: this.User
+      const operationList = await this.axios.post('http://localhost:4000/api/operationList', {
+        userID: this.User
       })
+      sessionStorage.setItem('session_operations', JSON.stringify(operationList.data))
       this.$router.push('/Operation')
     },
     goToHome () {
@@ -185,15 +186,6 @@ export default {
       this.statusMsg = 'You have deleted the account with Id : ' + this.idDelAccount
       this.updateAccounts()
     },
-    async updateAccounts () {
-      console.log('Accounts of: ' + this.User)
-      const accountList = await this.axios.post('http://localhost:4000/api/accountList', {
-        user: this.User
-      })
-      sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
-      this.accounts = JSON.parse(sessionStorage.getItem('session_accounts'))
-      console.log('Account List Updated !')
-    },
     createAccount () {
       console.log('Create account with Name: ' + this.NameNewAccount)
       this.axios.post('http://localhost:4000/api/createAccount', {
@@ -205,6 +197,15 @@ export default {
       this.statusMsg = 'You have created the account : ' + this.NameNewAccount
       this.NameNewAccount = ''
       this.updateAccounts()
+    },
+    async updateAccounts () {
+      console.log('Accounts of: ' + this.User)
+      const accountList = await this.axios.post('http://localhost:4000/api/accountList', {
+        user: this.User
+      })
+      sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
+      this.accounts = JSON.parse(sessionStorage.getItem('session_accounts'))
+      console.log('Account List Updated !')
     }
   }
 }
