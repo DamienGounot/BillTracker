@@ -37,6 +37,10 @@
             <v-list-item-title @click="goToBankOperation()">Add Bank Operation</v-list-item-title>
           </v-list-item>
 
+           <v-list-item>
+            <v-list-item-title @click="goToHelp()">Help</v-list-item-title>
+          </v-list-item>
+
           <v-list-item>
             <v-list-item-title @click="logout">Logout</v-list-item-title>
           </v-list-item>
@@ -86,6 +90,13 @@ export default {
         user: this.User
       })
       this.$router.push('/Operation')
+    },
+    goToHelp () {
+      console.log('Help of: ' + this.User)
+      this.axios.post('http://localhost:4000/api/Help', {
+        user: this.user
+      })
+      this.$router.push('/Help')
     }
   }
 }
