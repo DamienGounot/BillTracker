@@ -60,6 +60,24 @@ const accounts = [
     accountName: 'Livret Jeune',
     accountID: '1991561',
     total: '200'
+  },
+  {
+    userID: 'root',
+    accountName: 'Compte Courant',
+    accountID: '2233456',
+    total: '5467'
+  },
+  {
+    userID: 'root',
+    accountName: 'Compte Professionnel',
+    accountID: '345871',
+    total: '4593'
+  },
+  {
+    userID: 'root',
+    accountName: 'Compte Epargne',
+    accountID: '786512',
+    total: '37622'
   }
 ]
 
@@ -184,4 +202,7 @@ app.post('/api/createAccount', (req, res) => {
 })
 
 app.post('/api/addOperation', (req, res) => {
+})
+
+app.post('/api/Help', (req, res) => {
 })
