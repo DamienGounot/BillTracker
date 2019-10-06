@@ -39,7 +39,7 @@
             <v-list-item-title>Accounts</v-list-item-title>
           </v-list-item>
           <v-list-item>
-            <v-list-item-title>Help</v-list-item-title>
+            <v-list-item-title>Add Bank Operation</v-list-item-title>
           </v-list-item>
 
           <v-list-item>
@@ -56,7 +56,7 @@ export default {
   data: () => ({
     drawer: false,
     group: null,
-    pageTitle: 'Bank Operation'
+    pageTitle: 'Help'
   }),
 
   watch: {
@@ -71,8 +71,22 @@ export default {
       console.log('logout')
       sessionStorage.clear()
       this.$router.push('/')
+    },
+    async goToAccount () {
+      console.log('Accounts of: ' + this.User)
+      const accountList = await this.axios.post('http://localhost:4000/api/accountList', {
+        user: this.User
+      })
+      sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
+      this.$router.push('/Account')
+    },
+    goToBankOperation () {
+      console.log('Operation Management of: ' + this.User)
+      this.axios.post('http://localhost:4000/api/addOperation', {
+        user: this.User
+      })
+      this.$router.push('/Operation')
     }
   }
 }
-
 </script>

@@ -40,6 +40,10 @@
           </v-list-item>
 
           <v-list-item>
+            <v-list-item-title>Help</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item>
             <v-list-item-title @click="logout">Logout</v-list-item-title>
           </v-list-item>
         </v-list-item-group>

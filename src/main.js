@@ -7,6 +7,7 @@ import Home from './components/Home'
 import Login from './components/Login'
 import Account from './components/Account'
 import Operation from './components/Operation'
+import Help from './components/Help'
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -19,6 +20,7 @@ const routes = [
   { path: '/Operation', component: Operation, meta: { requiresAuth: true } },
   { path: '/Account', component: Account, meta: { requiresAuth: true } },
   { path: '/Home', component: Home, meta: { requiresAuth: true } },
+  { path: '/Help', component: Help, meta: { requiresAuth: true } },
   { path: '/', component: Login, meta: { requiresAuth: false } },
   { path: '/Login', component: Login, meta: { requiresAuth: false }, name: 'login' }]
 
