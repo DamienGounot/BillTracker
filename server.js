@@ -167,8 +167,21 @@ app.post('/api/deleteAccount', (req, res) => {
 })
 
 app.post('/api/createAccount', (req, res) => {
-  console.log('Create account with Name: ' + req.body.Name)
-  const errorName = accounts.find(u => u.accountName === req.body.Name)
+  console.log('Accounts Of (creation): ' + req.body.Name)
+  var userAccounts = []
+
+  accounts.forEach(element => {
+    if (element.userID === req.body.User) {
+      userAccounts.push({
+        userID: element.userID,
+        accountName: element.accountName,
+        accountID: element.accountID,
+        total: element.total
+      })
+    }
+  })
+  console.log(userAccounts)
+  const errorName = userAccounts.find(u => u.accountName === req.body.Name)
 
   if (!errorName) {
     do {
