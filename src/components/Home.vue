@@ -1,7 +1,6 @@
 <template>
   <v-card
     class="mx-auto overflow-hidden"
-    height="400"
   >
 
     <v-app-bar
@@ -80,11 +79,16 @@ export default {
       sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
       this.$router.push('/Account')
     },
-    goToBankOperation () {
+    async goToBankOperation () {
       console.log('Operation Management of: ' + this.User)
-      this.axios.post('http://localhost:4000/api/addOperation', {
+      const operationList = await this.axios.post('http://localhost:4000/api/operationList', {
+        userID: this.User
+      })
+      const accountList = await this.axios.post('http://localhost:4000/api/accountList', {
         user: this.User
       })
+      sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
+      sessionStorage.setItem('session_operations', JSON.stringify(operationList.data))
       this.$router.push('/Operation')
     }
   }

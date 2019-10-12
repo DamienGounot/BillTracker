@@ -36,7 +36,7 @@
           </v-list-item>
 
           <v-list-item>
-            <v-list-item-title>Add Bank Operation</v-list-item-title>
+            <v-list-item-title @click="goToBankOperation">Add Bank Operation</v-list-item-title>
           </v-list-item>
 
           <v-list-item>
@@ -160,11 +160,12 @@ export default {
       sessionStorage.clear()
       this.$router.push('/')
     },
-    goToBankOperation () {
+    async goToBankOperation () {
       console.log('Operation Management of: ' + this.User)
-      this.axios.post('http://localhost:4000/api/addOperation', {
-        user: this.User
+      const operationList = await this.axios.post('http://localhost:4000/api/operationList', {
+        userID: this.User
       })
+      sessionStorage.setItem('session_operations', JSON.stringify(operationList.data))
       this.$router.push('/Operation')
     },
     goToHome () {
@@ -185,6 +186,26 @@ export default {
       this.statusMsg = 'You have deleted the account with Id : ' + this.idDelAccount
       this.updateAccounts()
     },
+    async createAccount () {
+      console.log('Create account with Name: ' + this.NameNewAccount)
+      const answer = await this.axios.post('http://localhost:4000/api/createAccount', {
+        Name: this.NameNewAccount,
+        User: this.User
+      })
+      if (answer.data.message === 'success') {
+        this.show = true
+        this.msgType = 'success'
+        this.statusMsg = 'You have created the account : ' + this.NameNewAccount
+        this.NameNewAccount = ''
+      } else if (answer.data.message === 'error') {
+        this.show = true
+        this.msgType = 'error'
+        this.statusMsg = 'An error occured for : ' + this.NameNewAccount
+        this.NameNewAccount = ''
+      }
+
+      this.updateAccounts()
+    },
     async updateAccounts () {
       console.log('Accounts of: ' + this.User)
       const accountList = await this.axios.post('http://localhost:4000/api/accountList', {
@@ -193,18 +214,6 @@ export default {
       sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
       this.accounts = JSON.parse(sessionStorage.getItem('session_accounts'))
       console.log('Account List Updated !')
-    },
-    createAccount () {
-      console.log('Create account with Name: ' + this.NameNewAccount)
-      this.axios.post('http://localhost:4000/api/createAccount', {
-        Name: this.NameNewAccount,
-        User: this.User
-      })
-      this.show = true
-      this.msgType = 'success'
-      this.statusMsg = 'You have created the account : ' + this.NameNewAccount
-      this.NameNewAccount = ''
-      this.updateAccounts()
     }
   }
 }
