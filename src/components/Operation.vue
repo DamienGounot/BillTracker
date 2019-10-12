@@ -145,7 +145,8 @@ export default {
     OperationAccountID: '',
     OperationType: '',
     OperationAmount: '',
-    msgType: '',
+    show: false,
+    msgType: 'error',
     statusMsg: ''
   }),
 
@@ -195,10 +196,11 @@ export default {
       this.OperationAccountID = null
       this.OperationAmount = ''
       this.OperationType = null
+      this.show = false
     },
-    addOperation () {
+    async addOperation () {
       console.log('Add operation')
-      this.axios.post('http://localhost:4000/api/addOperation', {
+      const reponse = await this.axios.post('http://localhost:4000/api/addOperation', {
         accountID: this.OperationAccountID,
         operationName: this.OperationName,
         type: this.OperationType,
@@ -207,6 +209,15 @@ export default {
       })
       this.updateOperation()
       this.updateAccounts()
+      if (reponse.data.message === 'success') {
+        this.msgType = 'success'
+        this.statusMsg = 'Operation success'
+        this.show = true
+      } else if (reponse.data.message === 'error') {
+        this.msgType = 'error'
+        this.statusMsg = 'An error occured'
+        this.show = true
+      }
     },
     async updateAccounts () {
       console.log('Accounts of: ' + this.User)

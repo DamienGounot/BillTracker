@@ -186,16 +186,24 @@ export default {
       this.statusMsg = 'You have deleted the account with Id : ' + this.idDelAccount
       this.updateAccounts()
     },
-    createAccount () {
+    async createAccount () {
       console.log('Create account with Name: ' + this.NameNewAccount)
-      this.axios.post('http://localhost:4000/api/createAccount', {
+      const answer = await this.axios.post('http://localhost:4000/api/createAccount', {
         Name: this.NameNewAccount,
         User: this.User
       })
-      this.show = true
-      this.msgType = 'success'
-      this.statusMsg = 'You have created the account : ' + this.NameNewAccount
-      this.NameNewAccount = ''
+      if (answer.data.message === 'success') {
+        this.show = true
+        this.msgType = 'success'
+        this.statusMsg = 'You have created the account : ' + this.NameNewAccount
+        this.NameNewAccount = ''
+      } else if (answer.data.message === 'error') {
+        this.show = true
+        this.msgType = 'error'
+        this.statusMsg = 'An error occured for : ' + this.NameNewAccount
+        this.NameNewAccount = ''
+      }
+
       this.updateAccounts()
     },
     async updateAccounts () {

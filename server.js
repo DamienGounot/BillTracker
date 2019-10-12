@@ -198,6 +198,13 @@ app.post('/api/createAccount', (req, res) => {
       accountID: generatedID,
       total: '0'
     })
+    res.json({
+      message: 'success'
+    })
+  } else {
+    res.json({
+      message: 'error'
+    })
   }
 })
 
@@ -215,12 +222,12 @@ app.post('/api/addOperation', (req, res) => {
           error = true
         } else {
           console.log('ancien :' + accounts[i].total)
-          accounts[i].total = accounts[i].total - req.body.amount
+          accounts[i].total = parseInt(accounts[i].total, 10) - parseInt(req.body.amount, 10)
           console.log('nouveau :' + accounts[i].total)
         }
       } else if (req.body.type === 'deposit') {
         console.log('ancien deposit :' + accounts[i].total)
-        accounts[i].total = accounts[i].total + req.body.amount
+        accounts[i].total = parseInt(accounts[i].total, 10) + parseInt(req.body.amount, 10)
         console.log('nouveau deposit :' + accounts[i].total)
       }
     }
@@ -242,7 +249,7 @@ app.post('/api/addOperation', (req, res) => {
     })
   } else {
     res.json({
-      message: 'error: not enought money to Withdraw'
+      message: 'error'
     })
   }
 })
