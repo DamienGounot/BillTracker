@@ -42,7 +42,14 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <div>Welcome {{User}}</div>
+    <div>Welcome {{User}}
+        <v-data-table
+    :headers="headers"
+    :items="operations"
+    :items-per-page="All"
+    class="elevation-1"
+  ></v-data-table>
+    </div>
 
   </v-card>
 </template>
@@ -53,13 +60,23 @@ export default {
     drawer: false,
     group: null,
     pageTitle: 'History',
-    User: sessionStorage.getItem('session_username')
+    headers: [
+      { text: 'Operation ID', value: 'operationID' },
+      { text: 'Operation Name', value: 'operationName' },
+      { text: 'Account ID', value: 'accountID' },
+      { text: 'Type', value: 'type' },
+      { text: 'Amount', value: 'amount' }
+    ],
+    User: sessionStorage.getItem('session_username'),
+    operations: JSON.parse(sessionStorage.getItem('session_operations'))
+
   }),
 
   watch: {
     group () {
       this.drawer = false
-    }
+    },
+    operations: JSON.parse(sessionStorage.getItem('session_operations'))
   },
 
   methods: {
