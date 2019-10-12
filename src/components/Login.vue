@@ -74,10 +74,20 @@ export default {
         } else {
           console.log('combinaison valide')
           sessionStorage.setItem('session_username', this.Username)
+          this.updateOperation()
           this.$router.push('/Home')
         }
       }
     },
+    async updateOperation () {
+      console.log('Operations of User: ' + this.Username)
+      const operationList = await this.axios.post('http://localhost:4000/api/operationList', {
+        userID: this.Username
+      })
+      sessionStorage.setItem('session_operations', JSON.stringify(operationList.data))
+      console.log('Operation List Updated !')
+    },
+
     async createNewUser () {
       if (this.Password === '' || this.Username === '') {
         console.log('empty')
