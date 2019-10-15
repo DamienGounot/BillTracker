@@ -200,9 +200,3 @@ app.post('/api/createAccount', (req, res) => {
     })
   }
 })
-
-app.post('/api/addOperation', (req, res) => {
-})
-
-app.post('/api/Help', (req, res) => {
-})
