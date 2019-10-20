@@ -75,7 +75,6 @@ export default {
           console.log('combinaison valide')
           sessionStorage.setItem('session_username', this.Username)
           this.updateOperation()
-          this.$router.push('/Home')
         }
       }
     },
@@ -86,6 +85,7 @@ export default {
       })
       sessionStorage.setItem('session_operations', JSON.stringify(operationList.data))
       console.log('Operation List Updated !')
+      this.$router.push('/Home')
     },
 
     async createNewUser () {
@@ -121,17 +121,4 @@ export default {
     }
   }
 }
-
-/* rmElement (index) {
-      console.log('index', index)
-      this.todos.splice(index, 1)
-},
-    addElement () {
-      this.todos.push({
-        id: this.todos.length,
-        name: this.name,
-        description: this.description
-      })
-      console.log('ajouté !')
-    } */
 </script>
