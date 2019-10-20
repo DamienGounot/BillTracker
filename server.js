@@ -57,7 +57,7 @@ const accounts = [
   },
   {
     userID: 'root',
-    accountName: 'Livret Jeune',
+    accountName: 'Compte Courant',
     accountID: '1991561',
     total: '200'
   }
@@ -68,9 +68,41 @@ const operations = [
     accountID: '15646564',
     operationID: '5461',
     userID: 'root',
+    operationName: 'anniversaire',
+    type: 'deposit',
+    amount: '300'
+  },
+  {
+    accountID: '1991561',
+    operationID: '18486545',
+    userID: 'root',
     operationName: 'essence',
     type: 'withdraw',
-    amount: '60'
+    amount: '65'
+  },
+  {
+    accountID: '1991561',
+    operationID: '48576545',
+    userID: 'root',
+    operationName: 'peage',
+    type: 'withdraw',
+    amount: '15'
+  },
+  {
+    accountID: '1991561',
+    operationID: '68576854',
+    userID: 'root',
+    operationName: 'Loyer',
+    type: 'withdraw',
+    amount: '750'
+  },
+  {
+    accountID: '1991561',
+    operationID: '24975649',
+    userID: 'root',
+    operationName: 'Salaire',
+    type: 'deposit',
+    amount: '2500'
   },
   {
     accountID: '5615615',
@@ -258,7 +290,8 @@ app.post('/api/addOperation', (req, res) => {
       amount: req.body.amount
     })
     res.json({
-      message: 'success'
+      message: 'success',
+      operationID: generatedID
     })
   } else {
     res.json({
