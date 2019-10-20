@@ -81,7 +81,6 @@ export default {
 
   methods: {
     logout () {
-      // eslint-disable-next-line no-unused-vars
       this.axios.post('http://localhost:4000/api/logout')
       console.log('logout')
       sessionStorage.clear()

@@ -211,7 +211,7 @@ export default {
       this.updateAccounts()
       if (reponse.data.message === 'success') {
         this.msgType = 'success'
-        this.statusMsg = 'Operation success'
+        this.statusMsg = 'Operation ' + reponse.data.operationID + ' success !'
         this.show = true
       } else if (reponse.data.message === 'error') {
         this.msgType = 'error'
