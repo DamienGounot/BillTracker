@@ -83,7 +83,7 @@ export default {
         this.show = true
       } else {
         console.log('login request')
-        const login = await this.axios.post('http://localhost:4000/api/login', {
+        const login = await this.axios.post('/api/login', {
           username: this.Username,
           password: this.Password
 
@@ -103,7 +103,7 @@ export default {
     },
     async updateOperation () {
       console.log('Operations of User: ' + this.Username)
-      const operationList = await this.axios.post('http://localhost:4000/api/operationList', {
+      const operationList = await this.axios.post('/api/operationList', {
         userID: this.Username
       })
       sessionStorage.setItem('session_operations', JSON.stringify(operationList.data))
@@ -119,7 +119,7 @@ export default {
         this.show = true
       } else {
         // server request to know if a user already exist
-        const jsondata = await this.axios.post('http://localhost:4000/api/register', {
+        const jsondata = await this.axios.post('/api/register', {
           username: this.Username
         })
         if (!jsondata.data.status) {
@@ -129,7 +129,7 @@ export default {
           this.show = true
         } else {
           // add new user
-          this.axios.post('http://localhost:4000/api/createuser', {
+          this.axios.post('/api/createuser', {
             username: this.Username,
             password: this.Password
           })
