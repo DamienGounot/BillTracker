@@ -85,7 +85,7 @@ export default {
 
   methods: {
     logout () {
-      this.axios.post('http://localhost:4000/api/logout')
+      this.axios.post('/api/logout')
       console.log('logout')
       sessionStorage.clear()
       this.$router.push('/')
@@ -93,7 +93,7 @@ export default {
 
     async goToAccount () {
       console.log('Accounts of: ' + this.User)
-      const accountList = await this.axios.post('http://localhost:4000/api/accountList', {
+      const accountList = await this.axios.post('/api/accountList', {
         user: this.User
       })
       sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
@@ -101,10 +101,10 @@ export default {
     },
     async goToBankOperation () {
       console.log('Operation Management of: ' + this.User)
-      const operationList = await this.axios.post('http://localhost:4000/api/operationList', {
+      const operationList = await this.axios.post('/api/operationList', {
         userID: this.User
       })
-      const accountList = await this.axios.post('http://localhost:4000/api/accountList', {
+      const accountList = await this.axios.post('/api/accountList', {
         user: this.User
       })
       sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
