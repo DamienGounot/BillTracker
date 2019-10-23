@@ -1,7 +1,6 @@
 <template>
   <v-card
     class="mx-auto overflow-hidden"
-    height="400"
   >
 
     <v-app-bar
@@ -47,7 +46,14 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <div>Welcome {{User}}</div>
+    <div>Welcome {{User}}
+        <v-data-table
+    :headers="headers"
+    :items="operations"
+    :items-per-page="All"
+    class="elevation-1"
+  ></v-data-table>
+    </div>
 
   </v-card>
 </template>
@@ -58,18 +64,27 @@ export default {
     drawer: false,
     group: null,
     pageTitle: 'History',
-    User: sessionStorage.getItem('session_username')
+    headers: [
+      { text: 'Operation ID', value: 'operationID' },
+      { text: 'Operation Name', value: 'operationName' },
+      { text: 'Account ID', value: 'accountID' },
+      { text: 'Type', value: 'type' },
+      { text: 'Amount', value: 'amount' }
+    ],
+    User: sessionStorage.getItem('session_username'),
+    operations: JSON.parse(sessionStorage.getItem('session_operations'))
+
   }),
 
   watch: {
     group () {
       this.drawer = false
-    }
+    },
+    operations: JSON.parse(sessionStorage.getItem('session_operations'))
   },
 
   methods: {
     logout () {
-      // eslint-disable-next-line no-unused-vars
       this.axios.post('http://localhost:4000/api/logout')
       console.log('logout')
       sessionStorage.clear()
@@ -84,11 +99,16 @@ export default {
       sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
       this.$router.push('/Account')
     },
-    goToBankOperation () {
+    async goToBankOperation () {
       console.log('Operation Management of: ' + this.User)
-      this.axios.post('http://localhost:4000/api/addOperation', {
+      const operationList = await this.axios.post('http://localhost:4000/api/operationList', {
+        userID: this.User
+      })
+      const accountList = await this.axios.post('http://localhost:4000/api/accountList', {
         user: this.User
       })
+      sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
+      sessionStorage.setItem('session_operations', JSON.stringify(operationList.data))
       this.$router.push('/Operation')
     },
     goToHelp () {

@@ -1,5 +1,13 @@
 
 <template>
+<div>
+  <v-carousel >
+    <v-carousel-item
+      v-for="(item,i) in items"
+      :key="i"
+      :src="item.src"
+    ></v-carousel-item>
+  </v-carousel>
   <v-form>
            <v-alert
       v-model="show"
@@ -38,6 +46,7 @@
       Register
     </v-btn>
   </v-form>
+  </div>
 </template>
 
 <script>
@@ -48,7 +57,21 @@ export default {
     show: false,
     msgType: 'error',
     statusMsg: '',
-    loginGranted: false
+    loginGranted: false,
+    items: [
+      {
+        src: 'https://www.swipez.in/uploads/images/landing/rQ0busDtPobLZYjPK3jrHxryWiKBxUqBxk9Ij0vAs94.jpg'
+      },
+      {
+        src: 'https://www.oceanbankonline.com/images/businessonlinebanking_banner.jpg'
+      },
+      {
+        src: 'https://dhakabankltd.com/wp-content/uploads/2012/12/debit-card-banner-img.jpg'
+      },
+      {
+        src: 'https://www.bromford.co.uk/media/3731/main-page-banner.jpg'
+      }
+    ]
   }),
 
   methods: {
@@ -74,10 +97,20 @@ export default {
         } else {
           console.log('combinaison valide')
           sessionStorage.setItem('session_username', this.Username)
-          this.$router.push('/Home')
+          this.updateOperation()
         }
       }
     },
+    async updateOperation () {
+      console.log('Operations of User: ' + this.Username)
+      const operationList = await this.axios.post('http://localhost:4000/api/operationList', {
+        userID: this.Username
+      })
+      sessionStorage.setItem('session_operations', JSON.stringify(operationList.data))
+      console.log('Operation List Updated !')
+      this.$router.push('/Home')
+    },
+
     async createNewUser () {
       if (this.Password === '' || this.Username === '') {
         console.log('empty')
@@ -111,17 +144,4 @@ export default {
     }
   }
 }
-
-/* rmElement (index) {
-      console.log('index', index)
-      this.todos.splice(index, 1)
-},
-    addElement () {
-      this.todos.push({
-        id: this.todos.length,
-        name: this.name,
-        description: this.description
-      })
-      console.log('ajouté !')
-    } */
 </script>
