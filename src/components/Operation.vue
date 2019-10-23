@@ -32,14 +32,14 @@
         >
 
           <v-list-item>
-            <v-list-item-title>History</v-list-item-title>
+            <v-list-item-title @click="goToHome">History</v-list-item-title>
           </v-list-item>
 
           <v-list-item>
-            <v-list-item-title>Accounts</v-list-item-title>
+            <v-list-item-title @click="goToHelp">Help</v-list-item-title>
           </v-list-item>
           <v-list-item>
-            <v-list-item-title>Help</v-list-item-title>
+            <v-list-item-title>Accounts</v-list-item-title>
           </v-list-item>
 
           <v-list-item>
@@ -71,6 +71,20 @@ export default {
       console.log('logout')
       sessionStorage.clear()
       this.$router.push('/')
+    },
+    goToHelp () {
+      this.$router.push('/Help')
+    },
+    goToHome () {
+      this.$router.push('/Home')
+    },
+    async goToAccount () {
+      console.log('Accounts of: ' + this.User)
+      const accountList = await this.axios.post('http://localhost:4000/api/accountList', {
+        user: this.User
+      })
+      sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
+      this.$router.push('/Account')
     }
   }
 }

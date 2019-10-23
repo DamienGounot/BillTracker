@@ -92,10 +92,6 @@ export default {
       this.$router.push('/Operation')
     },
     goToHelp () {
-      console.log('Help of: ' + this.User)
-      this.axios.post('http://localhost:4000/api/Help', {
-        user: this.user
-      })
       this.$router.push('/Help')
     }
   }

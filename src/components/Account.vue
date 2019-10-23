@@ -36,11 +36,11 @@
           </v-list-item>
 
           <v-list-item>
-            <v-list-item-title>Add Bank Operation</v-list-item-title>
+            <v-list-item-title @click="goToBankOperation">Add Bank Operation</v-list-item-title>
           </v-list-item>
 
           <v-list-item>
-            <v-list-item-title>Help</v-list-item-title>
+            <v-list-item-title @click="goToHelp">Help</v-list-item-title>
           </v-list-item>
 
           <v-list-item>
@@ -173,6 +173,9 @@ export default {
     },
     goToHome () {
       this.$router.push('/Home')
+    },
+    goToHelp () {
+      this.$router.push('/Help')
     },
     clear () {
       this.NameNewAccount = ''
