@@ -40,6 +40,11 @@
           </v-list-item>
 
           <v-list-item>
+            <v-list-item-title @click="goToHelp">Help</v-list-item-title>
+
+          </v-list-item>
+
+          <v-list-item>
             <v-list-item-title @click="logout">Logout</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
@@ -170,6 +175,9 @@ export default {
     },
     goToHome () {
       this.$router.push('/Home')
+    },
+    goToHelp () {
+      this.$router.push('/Help')
     },
     clear () {
       this.NameNewAccount = ''

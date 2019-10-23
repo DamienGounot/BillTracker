@@ -115,7 +115,7 @@ export default {
       if (this.Password === '' || this.Username === '') {
         console.log('empty')
         this.msgType = 'warning'
-        this.statusMsg = 'Username & Password are required !'
+        this.statusMsg = 'Username and Password are required !'
         this.show = true
       } else {
         // server request to know if a user already exist

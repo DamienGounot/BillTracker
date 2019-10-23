@@ -36,6 +36,10 @@
             <v-list-item-title @click="goToBankOperation()">Add Bank Operation</v-list-item-title>
           </v-list-item>
 
+           <v-list-item>
+            <v-list-item-title @click="goToHelp()">Help</v-list-item-title>
+          </v-list-item>
+
           <v-list-item>
             <v-list-item-title @click="logout">Logout</v-list-item-title>
           </v-list-item>
@@ -106,6 +110,9 @@ export default {
       sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
       sessionStorage.setItem('session_operations', JSON.stringify(operationList.data))
       this.$router.push('/Operation')
+    },
+    goToHelp () {
+      this.$router.push('/Help')
     }
   }
 }

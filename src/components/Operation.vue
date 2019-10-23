@@ -35,6 +35,10 @@
           </v-list-item>
 
           <v-list-item>
+            <v-list-item-title @click="goToHelp">Help</v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title>Accounts</v-list-item-title>
             <v-list-item-title @click="goToAccount()">Accounts</v-list-item-title>
           </v-list-item>
 
@@ -180,7 +184,11 @@ export default {
       sessionStorage.clear()
       this.$router.push('/')
     },
-    async goToAccount () {
+    goToHelp () {
+      this.$router.push('/Help')
+},
+
+async goToAccount () {
       console.log('Accounts of: ' + this.User)
       const accountList = await this.axios.post('http://localhost:4000/api/accountList', {
         user: this.User
@@ -191,6 +199,7 @@ export default {
     goToHome () {
       this.$router.push('/Home')
     },
+
     clear () {
       this.OperationName = ''
       this.OperationAccountID = null
@@ -225,6 +234,7 @@ export default {
         user: this.User
       })
       sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
+
       this.accounts = JSON.parse(sessionStorage.getItem('session_accounts'))
       console.log('Account List Updated !')
     },
