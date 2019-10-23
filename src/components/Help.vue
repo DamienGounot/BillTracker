@@ -17,7 +17,7 @@
       <div class="flex-grow-1" ></div>
 
     </v-app-bar>
-    
+
     <v-navigation-drawer
       v-model="drawer"
       absolute
@@ -49,9 +49,7 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-  </v-card>
-  
-  <v-expansion-panels
+    <v-expansion-panels
     v-model="panel"
     :readonly="readonly"
     multiple
@@ -88,6 +86,7 @@
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
+  </v-card>
   </div>
 </template>
 
@@ -97,6 +96,7 @@ export default {
     drawer: false,
     group: null,
     pageTitle: 'Help',
+    User: sessionStorage.getItem('session_username')
   }),
   watch: {
     group () {
@@ -106,7 +106,7 @@ export default {
 
   methods: {
     logout () {
-      this.axios.post('http://localhost:4000/api/logout')
+      this.axios.post('/api/logout')
       console.log('logout')
       sessionStorage.clear()
       this.$router.push('/')
@@ -116,21 +116,26 @@ export default {
     },
     async goToAccount () {
       console.log('Accounts of: ' + this.User)
-      const accountList = await this.axios.post('http://localhost:4000/api/accountList', {
+      const accountList = await this.axios.post('/api/accountList', {
         user: this.User
       })
       sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
       this.$router.push('/Account')
     },
-    goToBankOperation () {
-      console.log('Operation Management of: ' + this.User)
-      this.axios.post('http://localhost:4000/api/addOperation', {
-        user: this.User
-      }),
 
+    async goToBankOperation () {
+      console.log('Operation Management of: ' + this.User)
+      const operationList = await this.axios.post('/api/operationList', {
+        userID: this.User
+      })
+      const accountList = await this.axios.post('/api/accountList', {
+        user: this.User
+      })
+      sessionStorage.setItem('session_accounts', JSON.stringify(accountList.data))
+      sessionStorage.setItem('session_operations', JSON.stringify(operationList.data))
       this.$router.push('/Operation')
     }
-   
+
   }
 }
 </script>

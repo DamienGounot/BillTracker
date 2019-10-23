@@ -63,7 +63,7 @@ const accounts = [
   },
   {
     userID: 'root',
-    accountName: 'Compte Courant',
+    accountName: 'PEL',
     accountID: '2233456',
     total: '5467'
   },
@@ -270,8 +270,6 @@ app.post('/api/createAccount', (req, res) => {
     })
   }
 })
-
-
 
 app.post('/api/addOperation', (req, res) => {
   console.log('Adding Operation: ')
